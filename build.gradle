@@ -1,0 +1,92 @@
+plugins {
+    id 'java-library'
+    alias libs.plugins.mdg
+}
+
+modsDotGroovy {
+    dslVersion = libs.versions.mdg.dsl.get()
+    platform 'fabric'
+}
+
+group = 'ore.groovymc'
+version = '1.0.0'
+
+repositories {
+    mavenCentral()
+}
+
+configurations {
+    jacksonResolve
+    bundle
+    bundleApi
+    api.extendsFrom(bundleApi)
+    bundle.extendsFrom(bundleApi)
+    bundleDependency
+    implementation.extendsFrom(bundleDependency)
+    bundle.extendsFrom(bundleDependency)
+}
+
+configurations.configureEach {
+    resolutionStrategy.eachDependency { DependencyResolveDetails details ->
+        if (details.requested.version == '<jackson-resolve>') {
+            details.useVersion configurations.jacksonResolve.resolvedConfiguration.resolvedArtifacts.find {
+                it.moduleVersion.id.group == details.requested.group && it.moduleVersion.id.name == details.requested.name
+            }.moduleVersion.id.version
+        }
+    }
+}
+
+import io.github.groovymc.modsdotgroovy.AbstractConvertTask
+
+afterEvaluate {
+    tasks.withType(AbstractConvertTask).configureEach {
+        dependsOn configurations.bundle
+        arguments['bundled'] = configurations.bundle.resolvedConfiguration.resolvedArtifacts.collect { "${it.moduleVersion.id.name}-${it.moduleVersion.id.version}.jar" as String }
+    }
+}
+
+import org.groovymc.groovybundler.bundle.Bundler
+
+tasks.register('bundle', Bundler) {
+    dependsOn configurations.bundle
+    bundleConfiguration = configurations.bundle
+    outputDirectory = layout.buildDirectory.dir("bundler")
+    modType = 'LIBRARY'
+    modulePrefix = 'org.groovymv.groovybundler.jij'
+}
+
+dependencies {
+    jacksonResolve libs.groovy.toml
+
+    bundleApi libs.groovy.core
+    bundleApi libs.groovy.contracts
+    bundleApi libs.groovy.datetime
+    bundleApi libs.groovy.nio
+    bundleApi libs.groovy.macro.core
+    bundleApi libs.groovy.macro.library
+    bundleApi libs.groovy.templates
+    bundleApi libs.groovy.xml
+    bundleApi libs.groovy.typecheckers
+    bundleApi libs.groovy.dateutil
+    bundleApi libs.groovy.ginq
+    bundleApi libs.groovy.toml
+    bundleApi libs.groovy.json
+
+    bundleDependency libs.jackson.core
+    bundleDependency libs.jackson.annotations
+    bundleDependency libs.jackson.databind
+    bundleDependency libs.jackson.dataformat.toml
+
+    bundleApi libs.opensesame
+}
+
+jar {
+    dependsOn tasks.bundle
+    from(bundle.outputDirectory)
+    manifest {
+        attributes(
+                'FMLModType': 'LIBRARY',
+                'Automatic-Module-Name': "${project.group}.${project.name}"
+        )
+    }
+}
