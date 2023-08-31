@@ -1,5 +1,6 @@
 plugins {
     id 'java-library'
+    id 'maven-publish'
     alias libs.plugins.mdg
 }
 
@@ -8,7 +9,7 @@ modsDotGroovy {
     platform 'fabric'
 }
 
-group = 'ore.groovymc'
+group = 'org.groovymc'
 version = '1.0.0'
 
 repositories {
@@ -22,7 +23,6 @@ configurations {
     api.extendsFrom(bundleApi)
     bundle.extendsFrom(bundleApi)
     bundleDependency
-    implementation.extendsFrom(bundleDependency)
     bundle.extendsFrom(bundleDependency)
 }
 
@@ -86,7 +86,19 @@ jar {
     manifest {
         attributes(
                 'FMLModType': 'LIBRARY',
-                'Automatic-Module-Name': "${project.group}.${project.name}"
+                'Automatic-Module-Name': "${project.group}.${project.name}",
+                'Specification-Version': project.version,
         )
+    }
+}
+
+java.withSourcesJar()
+java.withJavadocJar()
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+        }
     }
 }
