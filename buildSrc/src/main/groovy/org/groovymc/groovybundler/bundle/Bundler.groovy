@@ -56,6 +56,9 @@ abstract class Bundler extends DefaultTask {
             ]
             var outArchive = jarjarPath.file("${name}-${version}.jar")
 
+            var outLicenseDir = getOutputDirectory().get().dir("META-INF").dir("licenses").dir(name)
+            outLicenseDir.asFile.deleteDir()
+
             try (final input = new JarInputStream(artifact.file.newInputStream())
                  final output = new JarOutputStream(outArchive.asFile.newOutputStream())) {
                 final manifest = new Manifest(input.getManifest())
@@ -73,10 +76,28 @@ abstract class Bundler extends DefaultTask {
                     ZipEntry newEntry = new ZipEntry(entry.name)
                     if (entry.comment !== null) newEntry.setComment(entry.comment)
                     output.putNextEntry(newEntry)
-                    byte[] bytes = new byte[input.available()]
-                    input.read(bytes)
+                    byte[] bytes = input.readAllBytes()
                     output.write(bytes)
                     output.closeEntry()
+
+                    if (entry.name.startsWith("META-INF/licenses") && !entry.isDirectory()) {
+                        var licensePath = outLicenseDir.asFile.toPath().resolve(entry.name.substring("META-INF/".length()))
+                        Files.createDirectories(licensePath.parent)
+                        Files.write(licensePath, bytes)
+                    } else if (entry.name.startsWith("META-INF/LICENSE") && !entry.isDirectory()) {
+                        var licensePath = outLicenseDir.asFile.toPath().resolve(entry.name.substring("META-INF/".length()))
+                        Files.createDirectories(licensePath.parent)
+                        Files.write(licensePath, bytes)
+                    } else if (entry.name.startsWith("META-INF/NOTICE") && !entry.isDirectory()) {
+                        var licensePath = outLicenseDir.asFile.toPath().resolve(entry.name.substring("META-INF/".length()))
+                        Files.createDirectories(licensePath.parent)
+                        Files.write(licensePath, bytes)
+                    } else if (entry.name.startsWith("LICENSE") && !entry.isDirectory()) {
+                        var licensePath = outLicenseDir.asFile.toPath().resolve(entry.name)
+                        Files.deleteIfExists(licensePath)
+                        Files.createDirectories(licensePath.parent)
+                        Files.write(licensePath, bytes)
+                    }
                 }
 
                 ZipEntry fmjEntry = new ZipEntry("fabric.mod.json")

@@ -1,6 +1,6 @@
 ModsDotGroovy.make {
     issueTrackerUrl = 'https://github.com/GroovyMC/GroovyBundler/issues'
-    license = 'MIT'
+    license = 'BSD-3-Clause'
     mod {
         modId = 'groovybundler'
         version = this.version

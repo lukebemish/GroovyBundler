@@ -4,13 +4,14 @@ plugins {
     alias libs.plugins.mdg
 }
 
+apply from: 'version.gradle'
+
 modsDotGroovy {
     dslVersion = libs.versions.mdg.dsl.get()
     platform 'fabric'
 }
 
 group = 'org.groovymc'
-version = '1.0.0'
 
 repositories {
     mavenCentral()
@@ -42,6 +43,12 @@ afterEvaluate {
     tasks.withType(AbstractConvertTask).configureEach {
         dependsOn configurations.bundle
         arguments['bundled'] = configurations.bundle.resolvedConfiguration.resolvedArtifacts.collect { "${it.moduleVersion.id.name}-${it.moduleVersion.id.version}.jar" as String }
+    }
+}
+
+processResources {
+    from(rootProject.file('LICENSE')) {
+        into 'META-INF'
     }
 }
 
@@ -85,9 +92,11 @@ jar {
     from(bundle.outputDirectory)
     manifest {
         attributes(
-                'FMLModType': 'LIBRARY',
-                'Automatic-Module-Name': "${project.group}.${project.name}",
-                'Specification-Version': project.version,
+            'FMLModType': 'LIBRARY',
+            'Automatic-Module-Name': "${project.group}.${project.name}",
+            'Specification-Version': project.version,
+            'Implementation-Commit-Time': versioning.getGitCommitDate(),
+            'Implementation-Commit': versioning.getGitCommit(),
         )
     }
 }
