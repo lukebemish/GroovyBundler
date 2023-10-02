@@ -1,0 +1,42 @@
+name: Release
+concurrency: ci-${{ github.ref }}
+on:
+  workflow_dispatch:
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: fregante/setup-git-user@v2
+      - uses: actions/setup-java@v3
+        with:
+          distribution: "temurin"
+          java-version: 17
+      - uses: gradle/gradle-build-action@v2
+        with:
+          arguments: tagRelease
+          cache-read-only: ${{ !startsWith(github.ref, 'refs/heads/1.') }}
+      - uses: gradle/gradle-build-action@v2
+        with:
+          arguments: checkLicenses build
+          cache-read-only: ${{ !startsWith(github.ref, 'refs/heads/1.') }}
+      - uses: gradle/gradle-build-action@v2
+        with:
+          arguments: publish closeAndReleaseSonatypeStagingRepository
+          cache-read-only: ${{ !startsWith(github.ref, 'refs/heads/1.') }}
+        env:
+          SONATYPE_USER: ${{ secrets.CENTRAL_MAVEN_USER }}
+          SONATYPE_PASSWORD: ${{ secrets.CENTRAL_MAVEN_PASSWORD }}
+          SIGNING_KEY: ${{ secrets.GPG_SIGNING_KEY }}
+          SIGNING_PASSWORD: ${{ secrets.GPG_KEY_PASSWORD }}
+      - name: Run snapshot action
+        uses: mikepenz/gradle-dependency-submission@0.9.0
+        gradle-build-module: |-
+          :
+        gradle-build-configuration: |-
+          compileClasspath
+      - run: |
+          git push
+          git push --tags
