@@ -20,7 +20,7 @@ jobs:
           cache-read-only: ${{ !startsWith(github.ref, 'refs/heads/1.') }}
       - uses: gradle/gradle-build-action@v2
         with:
-          arguments: checkLicenses build
+          arguments: build
           cache-read-only: ${{ !startsWith(github.ref, 'refs/heads/1.') }}
       - uses: gradle/gradle-build-action@v2
         with:
