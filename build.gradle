@@ -137,6 +137,7 @@ publishing {
                     connection='scm:git:git://github.com/GroovyMC/GroovyBundler.git'
                     url='https://github.com/GroovyMC/GroovyBundler'
                 }
+            }
         }
     }
 }
