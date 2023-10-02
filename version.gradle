@@ -7,8 +7,6 @@ def gitTagProcess = 'git describe --abbrev=0 --tags'.execute()
 gitTagProcess.waitFor()
 if (gitTagProcess.exitValue() == 0) {
     lastTaggedVersion = gitTagProcess.text.trim()
-    def parts = lastTaggedVersion.split("-")
-    lastTaggedVersion = parts[0..-2].join("-")
 } else {
     logger.warn "Failed to get last tagged version: ERROR(${gitTagProcess.exitValue()})"
 }
@@ -80,7 +78,7 @@ tasks.register('tagRelease') {
                 throw new GradleException("Failed to commit version bump: ${error}")
             }
 
-            def gitTagCreateProcess = "git tag ${version}-${libs.versions.minecraft.get()}".execute()
+            def gitTagCreateProcess = "git tag ${version}".execute()
             gitTagCreateProcess.waitFor()
             if (gitTagCreateProcess.exitValue() != 0) {
                 throw new GradleException('Failed to tag release')
