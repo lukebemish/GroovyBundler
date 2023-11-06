@@ -31,5 +31,5 @@ opensesame_transform = { module = "dev.lukebemish.opensesame:opensesame-transfor
 
 [plugins]
 
-mdg = {id = "org.groovymc.modsdotgroovy", version = "1.4.1"}
+mdg = {id = "org.groovymc.modsdotgroovy", version = "1.4.3"}
 nexuspublish = { id = "io.github.gradle-nexus.publish-plugin", version = "1.3.0" }
