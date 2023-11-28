@@ -86,8 +86,9 @@ dependencies {
     bundleDependency libs.jackson.databind
     bundleDependency libs.jackson.dataformat.toml
 
-    bundleApi libs.opensesame.runtime
-    bundleApi libs.opensesame.transform
+    bundleApi libs.opensesame.groovy
+    bundleApi libs.opensesame.core
+    bundleDependency libs.opensesame.compile
 }
 
 jar {

@@ -3,7 +3,7 @@
 mdg_dsl = "1.5.1"
 groovy = "4.0.15"
 jackson = "<jackson-resolve>"
-opensesame = "0.2.0"
+opensesame = "0.3.6"
 
 [libraries]
 
@@ -26,8 +26,9 @@ jackson_annotations = { module = "com.fasterxml.jackson.core:jackson-annotations
 jackson_databind = { module = "com.fasterxml.jackson.core:jackson-databind", version.ref = "jackson" }
 jackson_dataformat_toml = { module = "com.fasterxml.jackson.dataformat:jackson-dataformat-toml", version.ref = "jackson" }
 
-opensesame_runtime = { module = "dev.lukebemish.opensesame:opensesame-runtime", version.ref = "opensesame" }
-opensesame_transform = { module = "dev.lukebemish.opensesame:opensesame-transform", version.ref = "opensesame" }
+opensesame_groovy = { module = "dev.lukebemish.opensesame:opensesame-groovy", version.ref = "opensesame" }
+opensesame_compile = { module = "dev.lukebemish.opensesame:opensesame-compile", version.ref = "opensesame" }
+opensesame_core = { module = "dev.lukebemish.opensesame:opensesame-core", version.ref = "opensesame" }
 
 [plugins]
 
