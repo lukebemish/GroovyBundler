@@ -3,7 +3,7 @@
 mdg_dsl = "1.5.1"
 groovy = "4.0.15"
 jackson = "<jackson-resolve>"
-opensesame = "0.3.6"
+opensesame = "0.3.7"
 
 [libraries]
 
