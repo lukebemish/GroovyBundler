@@ -1,7 +1,7 @@
 [versions]
 
 mdg_dsl = "1.5.1"
-groovy = "4.0.15"
+groovy = "4.0.17"
 jackson = "<jackson-resolve>"
 opensesame = "0.3.6"
 
