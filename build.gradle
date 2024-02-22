@@ -105,6 +105,8 @@ dependencies {
     bundleApi libs.opensesame.groovy
     bundleApi libs.opensesame.core
     bundleDependency libs.opensesame.compile
+    // So that groovy can find it
+    compileOnlyApi libs.opensesame.compile
 }
 
 jar {
