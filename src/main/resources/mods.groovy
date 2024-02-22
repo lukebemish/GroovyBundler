@@ -1,14 +1,13 @@
-ModsDotGroovy.make {
+MultiplatformModsDotGroovy.make {
     issueTrackerUrl = 'https://github.com/GroovyMC/GroovyBundler/issues'
     license = 'BSD-3-Clause'
     mod {
         modId = 'groovybundler'
-        version = this.version
+        version = buildProperties['version']
         displayName = 'GroovyBundler'
         description = 'Bundles Groovy and related libraries for use by GML or GroovyDuvet'
-        author 'GroovyMC'
+        author = 'GroovyMC'
         displayUrl = 'https://github.com/GroovyMC/GroovyBundler'
-        dependencies {}
     }
     onFabric {
         modmenu = [
@@ -21,8 +20,12 @@ ModsDotGroovy.make {
                         'badges':['library']
                 ]
         ]
-        jars = this.bundled.collect {
-            ['file': "META-INF/jarjar/$it" as String]
+        jars {
+            buildProperties['bundled'].collect { fileName ->
+                jar {
+                    file = "META-INF/jarjar/$fileName" as String
+                }
+            }
         }
     }
 }

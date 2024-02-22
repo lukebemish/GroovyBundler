@@ -63,9 +63,6 @@ abstract class Bundler extends DefaultTask {
                  final output = new JarOutputStream(outArchive.asFile.newOutputStream())) {
                 final manifest = new Manifest(input.getManifest())
                 manifest.mainAttributes.putValue('FMLModType', modType.get())
-                if (!manifest.mainAttributes.getValue('Automatic-Module-Name')) {
-                    manifest.mainAttributes.putValue('Automatic-Module-Name', (modulePrefix.get() + '.' + group + '.' + name).replace('-', '.'))
-                }
                 output.putNextEntry(new ZipEntry(JarFile.MANIFEST_NAME))
                 manifest.write(output)
                 output.closeEntry()

@@ -1,3 +1,8 @@
+import org.groovymc.groovybundler.bundle.Bundler
+import org.groovymc.modsdotgroovy.core.Platform
+import org.groovymc.modsdotgroovy.gradle.tasks.AbstractGatherPlatformDetailsTask
+import org.groovymc.modsdotgroovy.gradle.tasks.AbstractMDGConvertTask
+
 plugins {
     id 'java-library'
     id 'maven-publish'
@@ -9,8 +14,25 @@ plugins {
 apply from: 'version.gradle'
 
 modsDotGroovy {
-    dslVersion = libs.versions.mdg.dsl.get()
-    platform 'fabric'
+    multiplatform {
+        expose()
+    }
+    platforms.set([Platform.FABRIC])
+    inferGather.set false
+    enable()
+    apply()
+}
+
+tasks.withType(AbstractMDGConvertTask).configureEach {
+    dependsOn configurations.bundle
+    buildProperties.put 'bundled', provider {
+        configurations.bundle.resolvedConfiguration.resolvedArtifacts.collect { "${it.moduleVersion.id.name}-${it.moduleVersion.id.version}.jar" as String }
+    }
+}
+
+tasks.withType(AbstractGatherPlatformDetailsTask).configureEach {
+    minecraftVersion = '0.0.0'
+    platformVersion = 'unspecified'
 }
 
 group = 'org.groovymc'
@@ -27,6 +49,10 @@ configurations {
     bundle.extendsFrom(bundleApi)
     bundleDependency
     bundle.extendsFrom(bundleDependency)
+
+    bundle {
+        exclude(group: 'org.ow2.asm')
+    }
 }
 
 configurations.configureEach {
@@ -39,22 +65,12 @@ configurations.configureEach {
     }
 }
 
-import io.github.groovymc.modsdotgroovy.AbstractConvertTask
-
-afterEvaluate {
-    tasks.withType(AbstractConvertTask).configureEach {
-        dependsOn configurations.bundle
-        arguments['bundled'] = configurations.bundle.resolvedConfiguration.resolvedArtifacts.collect { "${it.moduleVersion.id.name}-${it.moduleVersion.id.version}.jar" as String }
-    }
-}
-
 processResources {
+    exclude 'mods.groovy'
     from(rootProject.file('LICENSE')) {
         into 'META-INF'
     }
 }
-
-import org.groovymc.groovybundler.bundle.Bundler
 
 tasks.register('bundle', Bundler) {
     dependsOn configurations.bundle
