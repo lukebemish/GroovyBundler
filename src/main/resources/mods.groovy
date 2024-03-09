@@ -10,16 +10,16 @@ MultiplatformModsDotGroovy.make {
         displayUrl = 'https://github.com/GroovyMC/GroovyBundler'
     }
     onFabric {
-        modmenu = [
+        custom {
+            modmenu = [
                 'badges':['library'],
                 'parent':[
-                        'id':'groovyduvet',
-                        'name':'GroovyDuvet',
-                        'description':'Language adapter and wrapper libraries for Groovy mods on Quilt/Fabric',
-                        'icon':'assets/groovyduvet/icon.png',
-                        'badges':['library']
+                    'id':'groovyduvet',
+                    'name':'GroovyDuvet',
+                    'description':'Language adapter and wrapper libraries for Groovy mods on Quilt/Fabric'
                 ]
-        ]
+            ]
+        }
         jars {
             buildProperties.bundled.collect { fileName ->
                 jar {
