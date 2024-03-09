@@ -3,7 +3,7 @@ MultiplatformModsDotGroovy.make {
     license = 'BSD-3-Clause'
     mod {
         modId = 'groovybundler'
-        version = buildProperties['version']
+        version = environmentInfo.version
         displayName = 'GroovyBundler'
         description = 'Bundles Groovy and related libraries for use by GML or GroovyDuvet'
         author = 'GroovyMC'
@@ -21,7 +21,7 @@ MultiplatformModsDotGroovy.make {
                 ]
         ]
         jars {
-            buildProperties['bundled'].collect { fileName ->
+            buildProperties.bundled.collect { fileName ->
                 jar {
                     file = "META-INF/jarjar/$fileName" as String
                 }
