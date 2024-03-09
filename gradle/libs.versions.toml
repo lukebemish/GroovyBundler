@@ -1,6 +1,6 @@
 [versions]
 
-groovy = "4.0.18"
+groovy = "4.0.19"
 jackson = "<jackson-resolve>"
 opensesame = "0.5.1"
 
