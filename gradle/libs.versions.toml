@@ -1,10 +1,10 @@
 [versions]
 
-groovy = "4.0.19"
+groovy = "4.0.21"
 jackson = "<jackson-resolve>"
-opensesame = "0.5.1"
+opensesame = "0.5.13"
 
-mdg = "2.0.0-beta.16"
+mdg = "2.0.0-beta.28"
 
 [libraries]
 
@@ -34,4 +34,4 @@ opensesame_core = { module = "dev.lukebemish.opensesame:opensesame-core", versio
 [plugins]
 
 mdg = {id = "org.groovymc.modsdotgroovy", version.ref = "mdg"}
-nexuspublish = { id = "io.github.gradle-nexus.publish-plugin", version = "2.0.0-rc-2" }
+nexuspublish = { id = "io.github.gradle-nexus.publish-plugin", version = "2.0.0" }
