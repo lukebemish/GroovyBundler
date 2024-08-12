@@ -2,7 +2,7 @@
 
 groovy = "4.0.22"
 jackson = "<jackson-resolve>"
-opensesame = "0.5.13"
+opensesame = "0.6.0"
 
 mdg = "2.0.0-beta.28"
 
