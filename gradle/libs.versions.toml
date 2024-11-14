@@ -1,10 +1,10 @@
 [versions]
 
-groovy = "4.0.22"
+groovy = "4.0.24"
 jackson = "<jackson-resolve>"
 opensesame = "0.5.13"
 
-mdg = "2.0.0-beta.28"
+mdg = "2.0.0-beta.30"
 
 [libraries]
 
