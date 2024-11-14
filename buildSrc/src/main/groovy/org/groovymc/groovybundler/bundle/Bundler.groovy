@@ -69,7 +69,6 @@ abstract class Bundler extends DefaultTask {
 
                 ZipEntry entry
                 while ((entry = input.nextEntry) !== null) {
-                    if (entry.name.endsWith('module-info.class')) continue
                     ZipEntry newEntry = new ZipEntry(entry.name)
                     if (entry.comment !== null) newEntry.setComment(entry.comment)
                     output.putNextEntry(newEntry)
